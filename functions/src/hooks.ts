@@ -61,7 +61,11 @@ const unset = async (user: string, type: string, save: boolean) => {
             ...currentStatus.data(),
             removed: firebase.firestore.Timestamp.now(),
         });
+
+        return true;
     }
+
+    return false;
 }
 
 app.get('/:user/:token/:type/set', async (req: express.Request, res: express.Response) => {
