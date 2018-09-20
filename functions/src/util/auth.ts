@@ -1,7 +1,9 @@
 import { firestore } from "./firestore";
 import { User } from "./types";
 
-export default async (req, res, next) => {
+import * as express from 'express';
+
+export default async (req: express.Request, res: express.Response, next) => {
     const auth = async (userName: string, token: string) => {
         const user = await firestore.collection('users').doc(userName).get();
 
@@ -18,7 +20,14 @@ export default async (req, res, next) => {
         return {success: true};
     }
 
-    const authResult = await auth(req.params.user || req.body.user, req.params.token || req.body.token);
+    const [authMethod = null, authUser = null, authToken = null] = req.headers.authorization
+        ? req.headers.authorization.split(" ")
+        : [];
+
+    const authResult = await auth(
+        req.params.user || authUser || req.body.user,
+        req.params.token || authToken || req.body.token
+    );
 
     if(!authResult.success) {
         res.status(authResult.code).json(authResult);
