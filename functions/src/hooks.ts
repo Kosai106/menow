@@ -6,7 +6,7 @@ import * as bodyParser from 'body-parser';
 
 import auth from './util/auth';
 import { firestore } from './util/firestore';
-import { User, Status, defaultStatus } from './util/types';
+import { Status, defaultStatus } from './util/types';
 
 const app = express();
 
