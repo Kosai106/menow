@@ -42,7 +42,7 @@ const setOrUpdate = async (user: string, type: string, status: Partial<Status>) 
     return (await statusRef.get()).data();
 }
 
-const unset = async (user: string, type: string, save: boolean = true) => {
+const unset = async (user: string, type: string, save: boolean) => {
     const statusRef = firestore
         .collection('users').doc(user)
         .collection('current_status').doc(type);
@@ -52,7 +52,7 @@ const unset = async (user: string, type: string, save: boolean = true) => {
     const batch = firestore.batch();
     batch.delete(statusRef);
 
-    if(currentStatus.exists && save) {
+    if(currentStatus.exists && (save || (save === undefined && currentStatus.data().save))) {
         const historyRef = firestore
             .collection('users').doc(user)
             .collection('current_status').doc();
