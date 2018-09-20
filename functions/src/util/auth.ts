@@ -5,7 +5,9 @@ import * as express from 'express';
 
 export default async (req: express.Request, res: express.Response, next) => {
     const auth = async (userName: string, token: string) => {
-        const user = await firestore.collection('users').doc(userName).get();
+        const userMap = await firestore.collection('usernames').doc(userName).get();
+
+        const user = await firestore.collection('users').doc(userMap.exists ? userMap.data().uid : userName).get();
 
         if(!user.exists) {
             return {success: false, error: "User could not be found.", code: 404}
