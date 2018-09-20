@@ -4,6 +4,7 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
 
+import auth from './util/auth';
 import { firestore } from './util/firestore';
 import { User, Status, defaultStatus } from './util/types';
 
@@ -13,7 +14,7 @@ app.use(cors({ origin: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use();
+app.use(auth);
 
 const setOrUpdate = async (user: string, type: string, status: Partial<Status>) => {
     const {added = null, ...newStatus}: Partial<Status> = {
