@@ -33,6 +33,8 @@ export interface HistoryStatus extends Status {
 }
 
 export interface User {
+    name: string;
+    bio: string;
     token: string;
 }
 
