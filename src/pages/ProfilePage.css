@@ -1,0 +1,12 @@
+.page.profile {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+.page.profile .statuses {
+    display: flex;
+    flex-wrap: wrap;
+
+}
