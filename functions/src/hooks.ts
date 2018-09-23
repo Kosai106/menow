@@ -1,12 +1,13 @@
+import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
+import * as express from 'express';
 import * as firebase from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import * as express from 'express';
-import * as cors from 'cors';
-import * as bodyParser from 'body-parser';
+
+import { defaultStatus, Status } from '../../shared/types';
 
 import auth from './util/auth';
 import { firestore } from './util/firestore';
-import { Status, defaultStatus } from '../../shared/types';
 
 const app = express();
 
@@ -20,9 +21,9 @@ const setOrUpdate = async (user: string, type: string, status: Partial<Status>) 
     const {added = null, ...newStatus}: Partial<Status> = {
         ...defaultStatus,
         ...status,
-        type: type,
+        type,
         updated: firebase.firestore.Timestamp.now(),
-    }
+    };
 
     const statusRef = firestore
         .collection('users').doc(user)
@@ -30,7 +31,7 @@ const setOrUpdate = async (user: string, type: string, status: Partial<Status>) 
 
     const currentStatus = await statusRef.get();
 
-    if(!currentStatus.exists) {
+    if (!currentStatus.exists) {
         await statusRef.set({
             ...newStatus,
             added: firebase.firestore.Timestamp.now(),
@@ -40,7 +41,7 @@ const setOrUpdate = async (user: string, type: string, status: Partial<Status>) 
     }
 
     return (await statusRef.get()).data();
-}
+};
 
 const unset = async (user: string, type: string, save: boolean) => {
     const statusRef = firestore
@@ -52,7 +53,7 @@ const unset = async (user: string, type: string, save: boolean) => {
     const batch = firestore.batch();
     batch.delete(statusRef);
 
-    if(currentStatus.exists && (save || (save === undefined && currentStatus.data().save))) {
+    if (currentStatus.exists && (save || (save === undefined && currentStatus.data().save))) {
         const historyRef = firestore
             .collection('users').doc(user)
             .collection('current_status').doc();
@@ -66,7 +67,7 @@ const unset = async (user: string, type: string, save: boolean) => {
     }
 
     return false;
-}
+};
 
 app.get('/:user/:token/:type/set', async (req: express.Request, res: express.Response) => {
     const {user, type} = req.params;
