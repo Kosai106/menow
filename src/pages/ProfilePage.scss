@@ -1,17 +1,18 @@
 .page.profile {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  min-height: 100vh;
 
-  align-items: center;
+  align-items: stretch;
 
   header {
     display: flex;
-    width: 100%;
     align-items: center;
     justify-content: center;
-    padding: 6rem 2rem 10rem 2rem;
+    padding: 6rem 2rem 8rem 2rem;
     background: bottom center no-repeat;
-    background-size: 100% 6vw;
+    background-size: 100% 4rem;
     background-color: #fafafa;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpolygon fill='white' points='0,100 1000,0 1000,100'/%3E%3C/svg%3E");
 
@@ -23,24 +24,36 @@
       .description {
         margin-left: 2rem;
 
-        h1 {
-          font-size: 1.5em;
-          margin-top: 0;
+        .name {
+          display: flex;
+          align-items: center;
+          margin-bottom: 1rem;
+
+          h1 {
+            font-size: 1.5em;
+            margin: 0;
+            margin-right: 1rem;
+          }
         }
 
         p {
+          font-size: 1rem;
           margin-top: 0;
         }
 
         a {
           font-family: 'Roboto Mono', monospace;
+
+          &:visited {
+            color: inherit;
+          }
         }
       }
 
       img {
         border-radius: 100px;
-        width: 200px;
-        height: 200px;
+        width: 175px;
+        height: 175px;
         object-fit: cover;
       }
     }
@@ -49,5 +62,21 @@
   .statuses {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: auto;
+    font-size: 3rem;
+    padding: 2rem;
+
+    a {
+      font-family: 'Roboto Mono', monospace;
+      text-decoration: none;
+      color: #eaeaea;
+    }
   }
 }

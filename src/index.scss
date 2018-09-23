@@ -8,6 +8,14 @@ h2, h3, h4 {
   font-family: 'Roboto Mono', monospace;
 }
 
-p {
-  font-size: 1.1rem;
+button {
+  background-color: #5BB25B;
+  color: white;
+  text-transform: uppercase;
+  border: none;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 10rem;
+  cursor: pointer;
+  outline: none;
 }

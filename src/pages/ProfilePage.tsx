@@ -17,9 +17,12 @@ export const ProfilePage: React.SFC<ProfileProps> = ({user, statuses}) => (
                 <img src={user.profile_image} />
 
                 <div className="description">
-                    <h1>{user.name}</h1>
+                    <div className="name">
+                        <h1>{user.name}</h1>
+                        <button>Add as friend</button>
+                    </div>
                     <p>{user.bio}</p>
-                    {user.url ? <a href={user.url}>{user.url}</a> : null}
+                    {user.url ? <a href={user.url} target="_blank" rel="nofollow">{user.url}</a> : null}
                 </div>
             </div>
         </header>
@@ -29,7 +32,7 @@ export const ProfilePage: React.SFC<ProfileProps> = ({user, statuses}) => (
         </div>
 
         <footer>
-            <a href="">MeNow</a>
+            <a href="/">MeNow</a>
         </footer>
     </div>
 )
