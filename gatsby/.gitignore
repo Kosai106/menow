@@ -1,0 +1,6 @@
+# Gatsby
+.cache
+public/
+
+# Firebase
+service-account.json
