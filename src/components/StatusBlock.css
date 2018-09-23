@@ -1,0 +1,28 @@
+.status {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    padding: 1rem;
+    width: 18rem;
+}
+
+.status h2 {
+    font-size: 6rem;
+    margin: 0;
+}
+
+.status h3 {
+    font-size: 1.4rem;
+    margin: 0.4rem 0;
+}
+
+.status a {
+    font-size: 1.4rem;
+    text-decoration: none;
+}
+
+.status a:hover {
+    text-decoration: underline;
+}
