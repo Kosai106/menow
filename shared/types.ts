@@ -21,7 +21,7 @@ export interface Status {
     // Visibility
     public: boolean;
     priority: number;
-    save: true;
+    save: boolean;
 
     // Meta
     meta?: {[k: string]: any};
