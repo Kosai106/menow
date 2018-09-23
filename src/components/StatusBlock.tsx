@@ -13,10 +13,12 @@ export default class StatusBlock extends React.Component<StatusProps> {
         return (
             <div className="status">
                 <h2>{this.props.status.icon}</h2>
-                <h3>{this.props.status.text}</h3>
-                {this.props.status.link
-                    ? <a href={this.props.status.link} rel="nofollow" target="_blank" style={{color: this.props.status.color}}>{this.props.status.link_text || 'Learn more...'}</a>
-                    : null}
+                <div className="text">
+                    <h3>{this.props.status.text}</h3>
+                    {this.props.status.link
+                        ? <a href={this.props.status.link} rel="nofollow" target="_blank" style={{color: this.props.status.color}}>{this.props.status.link_text || 'Learn more...'}</a>
+                        : null}
+                </div>
             </div>
         )
     }
