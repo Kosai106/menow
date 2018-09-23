@@ -4,28 +4,29 @@ import * as express from 'express';
 import { User } from "../../../shared/types";
 
 import { firestore } from "./firestore";
+import { handlify } from './handlify';
 
-export default async (req: express.Request, res: express.Response, next) => {
-    const auth = async (userName: string, token: string): Promise<[number, any]> => {
-        const user = await firestore.collection('users')
-            .doc(userName)
-            .get();
+const verifyToken = async (userName: string, token: string): Promise<[number, any]> => {
+    const user = await firestore.collection('users')
+        .doc(userName)
+        .get();
 
-        if (!user.exists) {
-            return [404, { error: "User could not be found." }];
-        }
+    if (!user.exists) {
+        return [404, { error: "User could not be found." }];
+    }
 
-        const userData = user.data() as User;
+    const userData = user.data() as User;
 
-        if (userData.token !== token) {
-            return [401, { error: "User Token is invalid." }];
-        }
+    if (userData.token !== token) {
+        return [401, { error: "User Token is invalid." }];
+    }
 
-        return [204, {}];
-    };
+    return [204, {}];
+};
 
+export const auth = handlify(async (req: express.Request, res: express.Response, next) => {
     const authResult = basicAuth(req);
-    const [code, response] = await auth(
+    const [code, response] = await verifyToken(
         req.params.user || (authResult && authResult.name) || req.body.user,
         req.params.token || (authResult && authResult.pass) || req.body.token,
     );
@@ -35,4 +36,4 @@ export default async (req: express.Request, res: express.Response, next) => {
     } else {
         res.status(code).json(response);
     }
-};
+});

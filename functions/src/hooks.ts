@@ -4,7 +4,7 @@ import * as express from 'express';
 import * as functions from 'firebase-functions';
 
 import { setOrUpdate, unset } from './model/status';
-import auth from './util/auth';
+import { auth } from './util/auth';
 import { handlify } from './util/handlify';
 
 const app = express();
