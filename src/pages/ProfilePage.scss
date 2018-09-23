@@ -13,6 +13,7 @@
     align-items: center;
     justify-content: center;
     padding: 6rem 2rem 8rem 2rem;
+    margin-bottom: 2rem;
     background: bottom center no-repeat;
     background-size: 100% 4rem;
     background-color: #fafafa;
@@ -84,17 +85,29 @@
     }
   }
 
-  .statuses {
+  .status-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     flex-grow: 1;
-    padding: 2rem;
+    justify-content: center;
 
-    @media(max-width: $breakpoint-small) {
-      flex-direction: column;
-      align-items: flex-start;
+    h2 {
+      text-align: center;
+      color: #dedede;
+      margin: 0;
+    }
+
+    .statuses {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+
+      @media(max-width: $breakpoint-small) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   }
 

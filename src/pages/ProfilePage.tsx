@@ -27,8 +27,13 @@ export const ProfilePage: React.SFC<ProfileProps> = ({user, statuses}) => (
       </div>
     </header>
 
-    <div className="statuses">
-      {statuses.map(status => <StatusBlock key={status.type} status={status} />)}
+    <div className="status-container">
+      <h2>I am currently...</h2>
+      <div className="statuses">
+        {statuses.length
+          ? statuses.map(status => <StatusBlock key={status.type} status={status} />)
+          : <h3>No statuses set.</h3>}
+      </div>
     </div>
 
     <footer>
