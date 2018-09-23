@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import * as React from 'react';
 import { match } from 'react-router';
 
@@ -27,8 +28,8 @@ interface ProfilePageState {
   user: User;
 }
 
-const Body: React.SFC<PageBodyProps> = ({ onAddFriend, statuses, user }) => (
-  <div className="page profile">
+const Body: React.SFC<PageBodyProps> = ({ onAddFriend, statuses, user, isLoading }) => (
+  <div className={classNames("page profile", {"loading": isLoading})}>
     <header>
       <div className="bio">
         <img src={user.profile_image} />

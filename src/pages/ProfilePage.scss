@@ -123,4 +123,24 @@
       color: #eaeaea;
     }
   }
+
+  &.loading {
+    h1, h2, h3, p, img {
+      animation: pulse 0.5s infinite alternate ease;
+    }
+
+    .statuses {
+      opacity: 0;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 0.8;
+  }
 }
