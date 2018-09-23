@@ -8,9 +8,12 @@ import './ProfilePage.css'
 export interface ProfileProps {
   statuses: Status[];
   user: User;
+
+  onAddFriend?: React.MouseEventHandler;
+  onLogin?: React.MouseEventHandler;
 }
 
-export const ProfilePage: React.SFC<ProfileProps> = ({ statuses, user }) => (
+export const ProfilePage: React.SFC<ProfileProps> = ({ onAddFriend, statuses, user }) => (
   <div className="page profile">
     <header>
       <div className="bio">
@@ -19,7 +22,7 @@ export const ProfilePage: React.SFC<ProfileProps> = ({ statuses, user }) => (
         <div className="description">
           <div className="name">
             <h1>{user.name}</h1>
-            <button>Add as friend</button>
+            <button onClick={onAddFriend}>Add as friend</button>
           </div>
           <p>{user.bio}</p>
           {user.url
