@@ -15,9 +15,8 @@ const user: User = {
 const statuses: Status[] = [{
   added: 100,
   color: '#1db954',
-  type: 'status',
+  type: 'spotify',
   updated: 100,
-
   icon: '🎧',
   link: 'https://open.spotify.com/user/leolabs/playlist/6zCmLKwSeeRb6OLdZ2Xf3i',
   link_text: 'Cinematic Work',
@@ -27,10 +26,9 @@ const statuses: Status[] = [{
   text: 'Listening to Music',
 }, {
   added: 100,
-  color: '#1db954',
-  type: 'status',
+  color: '#26477d',
+  type: 'coworking',
   updated: 100,
-
   icon: '⛪️',
   link: 'https://aachen.digital',
   link_text: 'At digitalHub Aachen',
@@ -40,10 +38,9 @@ const statuses: Status[] = [{
   text: 'Co-Working',
 }, {
   added: 100,
-  color: '#1db954',
-  type: 'status',
+  color: '#006FC5',
+  type: 'coding',
   updated: 100,
-
   icon: '🚀',
   link: 'https://open.spotify.com/user/leolabs/playlist/6zCmLKwSeeRb6OLdZ2Xf3i',
   link_text: 'In Visual Studio Code',
