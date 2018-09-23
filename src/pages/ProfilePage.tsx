@@ -6,11 +6,11 @@ import StatusBlock from '../components/StatusBlock';
 import './ProfilePage.css'
 
 export interface ProfileProps {
-  user: User;
   statuses: Status[];
+  user: User;
 }
 
-export const ProfilePage: React.SFC<ProfileProps> = ({user, statuses}) => (
+export const ProfilePage: React.SFC<ProfileProps> = ({ statuses, user }) => (
   <div className="page profile">
     <header>
       <div className="bio">
@@ -22,7 +22,9 @@ export const ProfilePage: React.SFC<ProfileProps> = ({user, statuses}) => (
             <button>Add as friend</button>
           </div>
           <p>{user.bio}</p>
-          {user.url ? <a href={user.url} target="_blank" rel="nofollow">{user.url}</a> : null}
+          {user.url
+            ? <a href={user.url} target="_blank" rel="nofollow">{user.url}</a>
+            : null}
         </div>
       </div>
     </header>
@@ -40,4 +42,4 @@ export const ProfilePage: React.SFC<ProfileProps> = ({user, statuses}) => (
       <a href="/">MeNow</a>
     </footer>
   </div>
-)
+);
