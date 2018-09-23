@@ -14,8 +14,8 @@ export interface Status {
     link_text?: string;
 
     // Time Info
-    added: firebase.firestore.Timestamp;
-    updated: firebase.firestore.Timestamp;
+    added: firebase.firestore.Timestamp | number;
+    updated: firebase.firestore.Timestamp | number;
     ttl?: number;
 
     // Visibility
@@ -28,13 +28,15 @@ export interface Status {
 }
 
 export interface HistoryStatus extends Status {
-    removed: firebase.firestore.Timestamp;
+    removed: firebase.firestore.Timestamp | number;
 }
 
 export interface User {
     name: string;
     bio: string;
-    token: string;
+    url?: string;
+    token?: string;
+    profile_image?: string;
 }
 
 export const defaultStatus: Partial<Status> = {
