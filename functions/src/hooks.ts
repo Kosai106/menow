@@ -8,6 +8,7 @@ import { defaultStatus, Status } from '../../shared/types';
 
 import auth from './util/auth';
 import { firestore } from './util/firestore';
+import { handlify } from './util/handlify';
 
 const app = express();
 
@@ -69,26 +70,26 @@ const unset = async (user: string, type: string, save: boolean) => {
     return false;
 };
 
-app.get('/:user/:token/:type/set', async (req: express.Request, res: express.Response) => {
+app.get('/:user/:token/:type/set', handlify(async (req: express.Request, res: express.Response) => {
     const {user, type} = req.params;
     return res.json({success: true, newStatus: (await setOrUpdate(user, type, req.query))});
-});
+}));
 
-app.post('/:user/:token/:type/set', async (req: express.Request, res: express.Response) => {
+app.post('/:user/:token/:type/set', handlify(async (req: express.Request, res: express.Response) => {
     const {user, type, ...status} = req.body;
     return res.json({success: true, newStatus: (await setOrUpdate(user, type, status))});
-});
+}));
 
-app.get('/:user/:token/:type/unset', async (req: express.Request, res: express.Response) => {
+app.get('/:user/:token/:type/unset', handlify(async (req: express.Request, res: express.Response) => {
     const {user, type} = req.params;
     await unset(user, type, req.query.save);
     return res.json({success: true});
-});
+}));
 
-app.post('/:user/:token/:type/unset', async (req: express.Request, res: express.Response) => {
+app.post('/:user/:token/:type/unset', handlify(async (req: express.Request, res: express.Response) => {
     const {user, type, save} = req.body;
     await unset(user, type, save);
     return res.json({success: true});
-});
+}));
 
 export const hook = functions.https.onRequest(app);
