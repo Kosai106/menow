@@ -1,10 +1,10 @@
+import * as firebase from 'firebase';
 import * as React from 'react';
-import './ProfilePage.css'
 
 import { Status, User } from '../../shared/types';
 import StatusBlock from '../components/StatusBlock';
 
-import * as firebase from 'firebase';
+import './ProfilePage.css'
 
 export interface ProfileProps {
     user: User;

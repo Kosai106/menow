@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import { Status } from "../../shared/types";
 
 import './StatusBlock.css';
@@ -8,7 +9,7 @@ interface StatusProps {
 }
 
 export default class StatusBlock extends React.Component<StatusProps> {
-    public render() {
+    render() {
         return (
             <div className="status">
                 <h2>{this.props.status.icon}</h2>
