@@ -19,16 +19,17 @@ app.use(bodyParser.json());
 app.use(auth);
 
 const setOrUpdate = async (user: string, type: string, status: Partial<Status>) => {
-    const {added = null, ...newStatus}: Partial<Status> = {
+    const { added = null, ...newStatus }: Partial<Status> = {
         ...defaultStatus,
         ...status,
         type,
         updated: firebase.firestore.Timestamp.now(),
     };
 
-    const statusRef = firestore
-        .collection('users').doc(user)
-        .collection('current_status').doc(newStatus.type);
+    const statusRef = firestore.collection('users')
+        .doc(user)
+        .collection('current_status')
+        .doc(newStatus.type);
 
     const currentStatus = await statusRef.get();
 
@@ -45,9 +46,10 @@ const setOrUpdate = async (user: string, type: string, status: Partial<Status>) 
 };
 
 const unset = async (user: string, type: string, save: boolean) => {
-    const statusRef = firestore
-        .collection('users').doc(user)
-        .collection('current_status').doc(type);
+    const statusRef = firestore.collection('users')
+        .doc(user)
+        .collection('current_status')
+        .doc(type);
 
     const currentStatus = await statusRef.get();
 
@@ -55,9 +57,10 @@ const unset = async (user: string, type: string, save: boolean) => {
     batch.delete(statusRef);
 
     if (currentStatus.exists && (save || (save === undefined && currentStatus.data().save))) {
-        const historyRef = firestore
-            .collection('users').doc(user)
-            .collection('current_status').doc();
+        const historyRef = firestore.collection('users')
+            .doc(user)
+            .collection('current_status')
+            .doc();
 
         batch.set(historyRef, {
             ...currentStatus.data(),
@@ -71,25 +74,25 @@ const unset = async (user: string, type: string, save: boolean) => {
 };
 
 app.get('/:user/:token/:type/set', handlify(async (req: express.Request, res: express.Response) => {
-    const {user, type} = req.params;
-    return res.json({success: true, newStatus: (await setOrUpdate(user, type, req.query))});
+    const { user, type } = req.params;
+    return res.json({ newStatus: (await setOrUpdate(user, type, req.query)) });
 }));
 
 app.post('/:user/:token/:type/set', handlify(async (req: express.Request, res: express.Response) => {
-    const {user, type, ...status} = req.body;
-    return res.json({success: true, newStatus: (await setOrUpdate(user, type, status))});
+    const { user, type, ...status } = req.body;
+    return res.json({ newStatus: (await setOrUpdate(user, type, status)) });
 }));
 
 app.get('/:user/:token/:type/unset', handlify(async (req: express.Request, res: express.Response) => {
-    const {user, type} = req.params;
+    const { user, type } = req.params;
     await unset(user, type, req.query.save);
-    return res.json({success: true});
+    return res.status(204).send();
 }));
 
 app.post('/:user/:token/:type/unset', handlify(async (req: express.Request, res: express.Response) => {
-    const {user, type, save} = req.body;
+    const { user, type, save } = req.body;
     await unset(user, type, save);
-    return res.json({success: true});
+    return res.status(204).send();
 }));
 
 export const hook = functions.https.onRequest(app);
