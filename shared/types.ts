@@ -1,4 +1,4 @@
-import * as firebase from 'firebase-admin';
+import * as firebase from 'firebase';
 
 export interface Status {
     // Basic
@@ -28,7 +28,6 @@ export interface Status {
 }
 
 export interface HistoryStatus extends Status {
-    type: string;
     removed: firebase.firestore.Timestamp;
 }
 
@@ -39,10 +38,10 @@ export interface User {
 }
 
 export const defaultStatus: Partial<Status> = {
-    type: 'status',
     icon: '🚀',
-    text: 'Default Status',
+    priority: 1,
     public: true,
     save: true,
-    priority: 1,
+    text: 'Default Status',
+    type: 'status',
 }

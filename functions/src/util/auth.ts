@@ -1,5 +1,5 @@
 import { firestore } from "./firestore";
-import { User } from "./types";
+import { User } from "../../../shared/types";
 
 import * as express from 'express';
 
