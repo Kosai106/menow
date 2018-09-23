@@ -25,4 +25,4 @@ yarn-error.log*
 
 firebase-config.ts
 
-src/*.css
+src/**/*.css
