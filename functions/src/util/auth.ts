@@ -6,9 +6,9 @@ import { User } from "../../../shared/types";
 import { firestore } from "./firestore";
 import { handlify } from './handlify';
 
-const verifyToken = async (userName: string, token: string): Promise<[number, any]> => {
+const verifyToken = async (uid: string, token: string): Promise<[number, any]> => {
     const user = await firestore.collection('users')
-        .doc(userName)
+        .doc(uid)
         .get();
 
     if (!user.exists) {
