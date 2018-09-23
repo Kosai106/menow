@@ -1,3 +1,5 @@
+@import "_breakpoints";
+
 body {
   margin: 0;
   padding: 0;
@@ -18,4 +20,14 @@ button {
   border-radius: 10rem;
   cursor: pointer;
   outline: none;
+
+  &:hover {
+    background-color: #4aae4a;
+  }
+}
+
+@media(max-width: $breakpoint-small) {
+  html {
+    font-size: 14px;
+  }
 }
