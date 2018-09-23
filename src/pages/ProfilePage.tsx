@@ -1,11 +1,15 @@
 import * as React from 'react';
+import { match } from 'react-router';
 
 import { Status, User } from '../../shared/types';
 import StatusBlock from '../components/StatusBlock';
+import * as defaultData from '../util/default-data';
+import { firestore } from '../util/firebase';
 
 import './ProfilePage.css'
 
-export interface ProfileProps {
+interface PageBodyProps {
+  isLoading: boolean;
   statuses: Status[];
   user: User;
 
@@ -13,7 +17,17 @@ export interface ProfileProps {
   onLogin?: React.MouseEventHandler;
 }
 
-export const ProfilePage: React.SFC<ProfileProps> = ({ onAddFriend, statuses, user }) => (
+export interface ProfilePageProps {
+  match: match<{ username: string }>;
+}
+
+interface ProfilePageState {
+  isLoading: boolean;
+  statuses: Status[];
+  user: User;
+}
+
+const Body: React.SFC<PageBodyProps> = ({ onAddFriend, statuses, user }) => (
   <div className="page profile">
     <header>
       <div className="bio">
@@ -46,3 +60,84 @@ export const ProfilePage: React.SFC<ProfileProps> = ({ onAddFriend, statuses, us
     </footer>
   </div>
 );
+
+export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageState> {
+  private static defaultState = {
+    isLoading: true,
+    statuses: defaultData.statuses,
+    user: defaultData.user,
+  };
+
+  private unsubscribeFirestore: () => void;
+
+  constructor(props: any) {
+    super(props);
+
+    this.onAddFriend = this.onAddFriend.bind(this);
+    this.onLogin = this.onLogin.bind(this);
+    this.state = ProfilePage.defaultState;
+  }
+
+  componentDidMount() {
+    this.invalidateFirestore();
+  }
+
+  componentDidUpdate(prevProps: Readonly<ProfilePageProps>) {
+    if (this.props.match.params.username === prevProps.match.params.username) {
+      return;
+    }
+
+    this.invalidateFirestore()
+      .catch(alert);
+  }
+
+  render() {
+    return (
+      <Body
+        onAddFriend={this.onAddFriend}
+        onLogin={this.onLogin}
+        {...this.state}
+      />
+    );
+  }
+
+  private async invalidateFirestore() {
+    if (this.unsubscribeFirestore) {
+      this.unsubscribeFirestore();
+    }
+    if (!this.props.match.params.username) {
+      this.setState(ProfilePage.defaultState);
+      return;
+    }
+
+    const users = await firestore.collection('users')
+      .where('slug', '==', this.props.match.params.username)
+      .limit(1)
+      .get();
+
+    if (users.empty) {
+      alert(`User ${this.props.match.params.username} not found!`);
+      return;
+    }
+
+    const userSnap = users.docs[0];
+
+    this.setState({ user: userSnap.data() as User });
+    this.unsubscribeFirestore = userSnap.ref
+      .collection('current_status')
+      .onSnapshot(statuses => {
+        this.setState({
+          isLoading: false,
+          statuses: statuses.docs.map(status => status.data() as Status)
+        });
+      });
+  }
+
+  private onAddFriend(ev: React.MouseEvent) {
+    // TODO: Implement add friend logic
+  }
+
+  private onLogin(ev: React.MouseEvent) {
+    // TODO: Implement login logic
+  }
+}
