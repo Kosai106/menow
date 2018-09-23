@@ -5,8 +5,6 @@ import { Status, User } from '../shared/types';
 
 import { ProfilePage } from './pages/ProfilePage';
 
-import './App.css';
-
 const user: User = {
   bio: "Hey there! My name is Leo Bernard. I'm a Stu­dent, Mu­si­cian and De­vel­oper. I love Pho­tog­ra­phy, Movies, Com­put­ers, Mu­sic and Cats.",
   name: 'Leo Bernard',
