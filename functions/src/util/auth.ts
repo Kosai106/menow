@@ -1,3 +1,4 @@
+import * as basicAuth from 'basic-auth';
 import * as express from 'express';
 
 import { User } from "../../../shared/types";
@@ -5,36 +6,33 @@ import { User } from "../../../shared/types";
 import { firestore } from "./firestore";
 
 export default async (req: express.Request, res: express.Response, next) => {
-    const auth = async (userName: string, token: string) => {
-        const userMap = await firestore.collection('usernames').doc(userName).get();
-
-        const user = await firestore.collection('users').doc(userMap.exists ? userMap.data().uid : userName).get();
+    const auth = async (userName: string, token: string): Promise<[number, any]> => {
+        const user = await firestore.collection('users')
+            .doc(userName)
+            .get();
 
         if (!user.exists) {
-            return {success: false, error: "User could not be found.", code: 404};
+            return [404, { error: "User could not be found." }];
         }
 
         const userData = user.data() as User;
 
         if (userData.token !== token) {
-            return {success: false, error: "User Token is invalid.", code: 401};
+            return [401, { error: "User Token is invalid." }];
         }
 
-        return {success: true};
+        return [204, {}];
     };
 
-    const [authMethod = null, authUser = null, authToken = null] = req.headers.authorization
-        ? req.headers.authorization.split(" ")
-        : [];
-
-    const authResult = await auth(
-        req.params.user || authUser || req.body.user,
-        req.params.token || authToken || req.body.token,
+    const authResult = basicAuth(req);
+    const [code, response] = await auth(
+        req.params.user || (authResult && authResult.name) || req.body.user,
+        req.params.token || (authResult && authResult.pass) || req.body.token,
     );
 
-    if (!authResult.success) {
-        res.status(authResult.code).json(authResult);
-    } else {
+    if (code >= 200 && code < 300) {
         next();
+    } else {
+        res.status(code).json(response);
     }
 };
