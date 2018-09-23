@@ -71,7 +71,7 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
 
   private unsubscribeFirestore: () => void;
 
-  constructor(props: any) {
+  constructor(props: ProfilePageProps) {
     super(props);
 
     this.onAddFriend = this.onAddFriend.bind(this);
