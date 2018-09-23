@@ -16,7 +16,7 @@ export default class StatusBlock extends React.Component<StatusProps> {
                 <div className="text">
                     <h3>{this.props.status.text}</h3>
                     {this.props.status.link
-                        ? <a href={this.props.status.link} rel="nofollow" target="_blank" style={{color: this.props.status.color}}>{this.props.status.link_text || 'Learn more...'}</a>
+                        ? <a href={this.props.status.link} rel="nofollow" target="_blank" style={{color: this.props.status.color || 'rgb(0, 111, 197)'}}>{this.props.status.link_text || 'Learn more...'}</a>
                         : null}
                 </div>
             </div>
