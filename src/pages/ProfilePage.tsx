@@ -1,4 +1,3 @@
-import * as firebase from 'firebase';
 import * as React from 'react';
 
 import { Status, User } from '../../shared/types';
@@ -11,53 +10,26 @@ export interface ProfileProps {
     statuses: Status[];
 }
 
-const statuses: Status[] = [{
-    added: firebase.firestore.Timestamp.now(),
-    color: '#1db954',
-    type: 'status',
-    updated: firebase.firestore.Timestamp.now(),
-
-    icon: '🎧',
-    link: 'https://open.spotify.com/user/leolabs/playlist/6zCmLKwSeeRb6OLdZ2Xf3i',
-    link_text: 'Cinematic Work',
-    priority: 1,
-    public: true,
-    save: true,
-    text: 'Listening to Music',
-  }, {
-    added: firebase.firestore.Timestamp.now(),
-    color: '#1db954',
-    type: 'status',
-    updated: firebase.firestore.Timestamp.now(),
-
-    icon: '⛪️',
-    link: 'https://aachen.digital',
-    link_text: 'At digitalHub Aachen',
-    priority: 1,
-    public: true,
-    save: true,
-    text: 'Co-Working',
-  }, {
-    added: firebase.firestore.Timestamp.now(),
-    color: '#1db954',
-    type: 'status',
-    updated: firebase.firestore.Timestamp.now(),
-
-    icon: '🚀',
-    link: 'https://open.spotify.com/user/leolabs/playlist/6zCmLKwSeeRb6OLdZ2Xf3i',
-    link_text: 'In Visual Studio Code',
-    priority: 1,
-    public: true,
-    save: true,
-    text: 'Programming',
-  }]
-
-export const ProfilePage: React.SFC<ProfileProps> = ({user}) => (
+export const ProfilePage: React.SFC<ProfileProps> = ({user, statuses}) => (
     <div className="page profile">
-        <header>Bio</header>
+        <header>
+            <div className="bio">
+                <img src={user.profile_image} />
+
+                <div className="description">
+                    <h1>{user.name}</h1>
+                    <p>{user.bio}</p>
+                    {user.url ? <a href={user.url}>{user.url}</a> : null}
+                </div>
+            </div>
+        </header>
 
         <div className="statuses">
             {statuses.map(status => <StatusBlock key={status.type} status={status} />)}
         </div>
+
+        <footer>
+            <a href="">MeNow</a>
+        </footer>
     </div>
 )

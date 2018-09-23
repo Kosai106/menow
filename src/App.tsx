@@ -1,15 +1,67 @@
 import * as React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
+import { Status, User } from '../shared/types';
+
 import { ProfilePage } from './pages/ProfilePage';
 
 import './App.css';
+
+const user: User = {
+  bio: "Hey there! My name is Leo Bernard. I'm a Stu­dent, Mu­si­cian and De­vel­oper. I love Pho­tog­ra­phy, Movies, Com­put­ers, Mu­sic and Cats.",
+  name: 'Leo Bernard',
+  profile_image: 'data:image/jpeg;base64,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',
+  url: 'https://leolabs.org',
+}
+
+const statuses: Status[] = [{
+  added: 100,
+  color: '#1db954',
+  type: 'status',
+  updated: 100,
+
+  icon: '🎧',
+  link: 'https://open.spotify.com/user/leolabs/playlist/6zCmLKwSeeRb6OLdZ2Xf3i',
+  link_text: 'Cinematic Work',
+  priority: 1,
+  public: true,
+  save: true,
+  text: 'Listening to Music',
+}, {
+  added: 100,
+  color: '#1db954',
+  type: 'status',
+  updated: 100,
+
+  icon: '⛪️',
+  link: 'https://aachen.digital',
+  link_text: 'At digitalHub Aachen',
+  priority: 1,
+  public: true,
+  save: true,
+  text: 'Co-Working',
+}, {
+  added: 100,
+  color: '#1db954',
+  type: 'status',
+  updated: 100,
+
+  icon: '🚀',
+  link: 'https://open.spotify.com/user/leolabs/playlist/6zCmLKwSeeRb6OLdZ2Xf3i',
+  link_text: 'In Visual Studio Code',
+  priority: 1,
+  public: true,
+  save: true,
+  text: 'Programming',
+}];
 
 class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
-        <Route path='/:username' component={ProfilePage} />
+        <Route path='/:username'>
+          <ProfilePage statuses={statuses} user={user} />
+        </Route>
       </BrowserRouter>
     );
   }
