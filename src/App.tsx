@@ -52,13 +52,13 @@ const statuses: Status[] = [{
 
 class App extends React.Component {
   render() {
-    return (
-      <BrowserRouter>
-        <Route path='/:username'>
-          <ProfilePage statuses={statuses} user={user} />
-        </Route>
-      </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <Route path='/:username'>
+        <ProfilePage statuses={statuses} user={user} />
+      </Route>
+    </BrowserRouter>
+  );
   }
 }
 

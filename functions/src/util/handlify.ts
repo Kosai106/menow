@@ -8,5 +8,5 @@ import { RequestHandler } from 'express';
  * @returns {RequestHandler} a new request handler that handles any promise errors that might occur.
  */
 export function handlify(handler: RequestHandler): RequestHandler {
-    return (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next);
+  return (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next);
 }

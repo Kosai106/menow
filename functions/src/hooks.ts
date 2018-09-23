@@ -16,25 +16,25 @@ app.use(bodyParser.json());
 app.use(auth);
 
 app.get('/:user/:token/:type/set', handlify(async (req: express.Request, res: express.Response) => {
-    const { user, type } = req.params;
-    return res.json({ newStatus: (await setOrUpdate(user, type, req.query)) });
+  const { user, type } = req.params;
+  return res.json({ newStatus: (await setOrUpdate(user, type, req.query)) });
 }));
 
 app.post('/:user/:token/:type/set', handlify(async (req: express.Request, res: express.Response) => {
-    const { user, type, ...status } = req.body;
-    return res.json({ newStatus: (await setOrUpdate(user, type, status)) });
+  const { user, type, ...status } = req.body;
+  return res.json({ newStatus: (await setOrUpdate(user, type, status)) });
 }));
 
 app.get('/:user/:token/:type/unset', handlify(async (req: express.Request, res: express.Response) => {
-    const { user, type } = req.params;
-    await unset(user, type, req.query.save);
-    return res.status(204).send();
+  const { user, type } = req.params;
+  await unset(user, type, req.query.save);
+  return res.status(204).send();
 }));
 
 app.post('/:user/:token/:type/unset', handlify(async (req: express.Request, res: express.Response) => {
-    const { user, type, save } = req.body;
-    await unset(user, type, save);
-    return res.status(204).send();
+  const { user, type, save } = req.body;
+  await unset(user, type, save);
+  return res.status(204).send();
 }));
 
 export const hook = functions.https.onRequest(app);
