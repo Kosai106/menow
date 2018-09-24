@@ -44,16 +44,14 @@ export const unset = async (user: string, type: string, save: boolean) => {
   if (currentStatus.exists && (save || (save === undefined && currentStatus.data().save))) {
     const historyRef = firestore.collection('users')
       .doc(user)
-      .collection('current_status')
+      .collection('status_history')
       .doc();
 
     batch.set(historyRef, {
       ...currentStatus.data(),
       removed: firebase.firestore.Timestamp.now(),
     });
-
-    return true;
   }
 
-  return false;
+  await batch.commit();
 };
