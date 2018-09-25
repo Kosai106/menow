@@ -111,13 +111,14 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
       return;
     }
 
+    const uslug = this.props.match.params.username;
     const users = await firestore.collection('users')
-      .where('slug', '==', this.props.match.params.username)
+      .where('slug', '==', uslug)
       .limit(1)
       .get();
 
     if (users.empty) {
-      alert(`User ${this.props.match.params.username} not found!`);
+      alert(`User ${uslug} not found!`);
       return;
     }
 
