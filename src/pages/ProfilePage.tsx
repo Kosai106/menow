@@ -29,7 +29,7 @@ interface ProfilePageState {
 }
 
 const Body: React.SFC<PageBodyProps> = ({ onAddFriend, statuses, user, isLoading }) => (
-  <div className={classNames("page profile", {"loading": isLoading})}>
+  <div className={classNames("page profile", { 'loading': isLoading })}>
     <header>
       <div className="bio">
         <img src={user.profile_image} />
