@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import * as React from 'react';
+import Helmet from 'react-helmet';
 import { match } from 'react-router';
 
 import { Status, User } from '../../shared/types';
@@ -29,37 +30,43 @@ interface ProfilePageState {
 }
 
 const Body: React.SFC<PageBodyProps> = ({ onAddFriend, statuses, user, isLoading }) => (
-  <div className={classNames("page profile", { 'loading': isLoading })}>
-    <header>
-      <div className="bio">
-        <img src={user.profile_image} />
+  <>
+    <Helmet>
+      <title>See what {user.name} is doing - MeNow</title>
+    </Helmet>
 
-        <div className="description">
-          <div className="name">
-            <h1>{user.name}</h1>
-            <button onClick={onAddFriend}>Add as friend</button>
+    <div className={classNames("page profile", { 'loading': isLoading })}>
+      <header>
+        <div className="bio">
+          <img src={user.profile_image} />
+
+          <div className="description">
+            <div className="name">
+              <h1>{user.name}</h1>
+              <button onClick={onAddFriend}>Add as friend</button>
+            </div>
+            <p>{user.bio}</p>
+            {user.url
+              ? <a href={user.url} target="_blank" rel="nofollow">{user.url}</a>
+              : null}
           </div>
-          <p>{user.bio}</p>
-          {user.url
-            ? <a href={user.url} target="_blank" rel="nofollow">{user.url}</a>
-            : null}
+        </div>
+      </header>
+
+      <div className="status-container">
+        <h2>I am currently...</h2>
+        <div className="statuses">
+          {statuses.length
+            ? statuses.map(status => <StatusBlock key={status.type} status={status} />)
+            : <h3>No statuses set.</h3>}
         </div>
       </div>
-    </header>
 
-    <div className="status-container">
-      <h2>I am currently...</h2>
-      <div className="statuses">
-        {statuses.length
-          ? statuses.map(status => <StatusBlock key={status.type} status={status} />)
-          : <h3>No statuses set.</h3>}
-      </div>
+      <footer>
+        <a href="/">MeNow</a>
+      </footer>
     </div>
-
-    <footer>
-      <a href="/">MeNow</a>
-    </footer>
-  </div>
+  </>
 );
 
 export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageState> {
