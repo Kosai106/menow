@@ -49,7 +49,7 @@ const Body: React.SFC<PageBodyProps> = ({ onAddFriend, statuses, user, isLoading
             <a
               href={user.url}
               target="_blank"
-              rel="nofollow"
+              rel="nofollow noopener"
             >
               {user.url || '\u200B' /* Zero width space to avoid plopping */}
             </a>
