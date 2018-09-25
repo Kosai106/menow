@@ -46,9 +46,13 @@ const Body: React.SFC<PageBodyProps> = ({ onAddFriend, statuses, user, isLoading
               <button onClick={onAddFriend}>Add as friend</button>
             </div>
             <p>{user.bio}</p>
-            {user.url
-              ? <a href={user.url} target="_blank" rel="nofollow">{user.url}</a>
-              : null}
+            <a
+              href={user.url}
+              target="_blank"
+              rel="nofollow"
+            >
+              {user.url || '\u200B' /* Zero width space to avoid plopping */}
+            </a>
           </div>
         </div>
       </header>
