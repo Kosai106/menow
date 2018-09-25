@@ -126,12 +126,10 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
     this.setState({ user: userSnap.data() as User });
     this.unsubscribeFirestore = userSnap.ref
       .collection('current_status')
-      .onSnapshot(statuses => {
-        this.setState({
-          isLoading: false,
-          statuses: statuses.docs.map(status => status.data() as Status)
-        });
-      });
+      .onSnapshot(statuses => this.setState({
+        isLoading: false,
+        statuses: statuses.docs.map(status => status.data() as Status)
+      }));
   }
 
   private onAddFriend(ev: React.MouseEvent) {
