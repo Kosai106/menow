@@ -2,3 +2,4 @@
 import 'firebase-functions';
 
 export * from './hooks';
+export * from './profileInfo';

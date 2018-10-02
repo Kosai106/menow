@@ -6,7 +6,7 @@ import { match } from 'react-router';
 import { Status, User } from '../../shared/types';
 import StatusBlock from '../components/StatusBlock';
 import * as defaultData from '../util/default-data';
-import { firestore } from '../util/firebase';
+import { getProfileInfo } from '../util/firebase/functions';
 
 import './ProfilePage.css'
 
@@ -91,6 +91,12 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
   }
 
   componentDidMount() {
+    /*
+     * We first load the data through a cloud function to reduce initial latency.
+     * Then we dynamically load Firestore and attach our real-time listeners.
+     */
+
+    this.prefetchData();
     this.invalidateFirestore();
   }
 
@@ -122,6 +128,8 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
       return;
     }
 
+    const { firestore } = await import('../util/firebase/firestore');
+
     const uslug = this.props.match.params.username;
     const users = await firestore.collection('users')
       .where('slug', '==', uslug)
@@ -142,6 +150,28 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
         isLoading: false,
         statuses: statuses.docs.map(status => status.data() as Status)
       }));
+  }
+
+  /**
+   * Fetch profile data through a cloud function instead of going through firestore
+   * to reduce initial latency.
+   */
+  private async prefetchData() {
+    const { data } = await getProfileInfo({ username: this.props.match.params.username });
+
+    if (!data) {
+      return;
+    }
+
+    this.setState(prevState => {
+      // If we actually are behind firestore, do nothing as Firestore's data is
+      // probably more up-to-date.
+      if (!prevState.isLoading) {
+        return null;
+      }
+
+      return { ...data, isLoading: false };
+    });
   }
 
   private onAddFriend(ev: React.MouseEvent) {
