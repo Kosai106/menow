@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import * as React from 'react';
 import Helmet from 'react-helmet';
+import * as Loadable from 'react-loadable';
 import { match } from 'react-router';
 
 import { Status, User } from '../../shared/types';
@@ -10,13 +11,12 @@ import { getProfileInfo } from '../util/firebase/functions';
 
 import './ProfilePage.css'
 
-interface PageBodyProps {
-  isLoading: boolean;
-  statuses: Status[];
-  user: User;
-
+interface PageBodyProps extends ProfilePageState {
   onAddFriend?: React.MouseEventHandler;
+  onGoToDashboard?: React.MouseEventHandler;
   onLogin?: React.MouseEventHandler;
+  onRequestLoginModalClose?: () => void;
+  onSignup?: React.MouseEventHandler;
 }
 
 export interface ProfilePageProps {
@@ -24,19 +24,58 @@ export interface ProfilePageProps {
 }
 
 interface ProfilePageState {
+  authStateKnown: boolean;
   isLoading: boolean;
+  isLoginModalOpen: boolean;
+  isSignedIn: boolean;
+  loginModalTitle: string;
   statuses: Status[];
   user: User;
 }
 
-const Body: React.SFC<PageBodyProps> = ({ onAddFriend, statuses, user, isLoading }) => (
+const LoginModal = Loadable({
+  loader: () => import('../components/LoginModal'),
+  loading: () => null,
+});
+
+const Body: React.SFC<PageBodyProps> = ({
+  authStateKnown,
+  isLoading,
+  isLoginModalOpen,
+  isSignedIn,
+  loginModalTitle,
+  onAddFriend,
+  onGoToDashboard,
+  onLogin,
+  onRequestLoginModalClose,
+  onSignup,
+  statuses,
+  user,
+}) => (
   <>
     <Helmet>
       <title>See what {user.name} is doing - MeNow</title>
     </Helmet>
 
+    <LoginModal
+      headerText={loginModalTitle}
+      isOpen={isLoginModalOpen}
+      onRequestClose={onRequestLoginModalClose}
+    />
+
     <div className={classNames("page profile", { 'loading': isLoading })}>
       <header>
+        <div className={classNames('buttons', {visible: authStateKnown})}>
+          {isSignedIn
+            ? <button onClick={onGoToDashboard}>Dashboard</button>
+            : (
+              <>
+                <button onClick={onLogin}>Login</button>
+                <button onClick={onSignup}>Sign Up</button>
+              </>
+            )}
+        </div>
+
         <div className="bio">
           <img src={user.profile_image} />
 
@@ -74,8 +113,12 @@ const Body: React.SFC<PageBodyProps> = ({ onAddFriend, statuses, user, isLoading
 );
 
 export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageState> {
-  private static defaultState = {
+  private static defaultState: ProfilePageState = {
+    authStateKnown: false,
     isLoading: true,
+    isLoginModalOpen: false,
+    isSignedIn: false,
+    loginModalTitle: '',
     statuses: defaultData.statuses,
     user: defaultData.user,
   };
@@ -93,8 +136,9 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
      * We first load the data through a cloud function to reduce initial latency.
      * Then we dynamically load Firestore and attach our real-time listeners.
      */
-
     this.prefetchData();
+
+    this.initializeAuth();
     this.invalidateFirestore();
   }
 
@@ -110,11 +154,29 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
   render() {
     return (
       <Body
+        {...this.state}
         onAddFriend={this.onAddFriend}
         onLogin={this.onLogin}
-        {...this.state}
+        onRequestLoginModalClose={this.onLoginModalClose}
+        onSignup={this.onSignUp}
       />
     );
+  }
+
+  /**
+   * Initializes the state based on whether there currently is somebody
+   * signed in.
+   */
+  private async initializeAuth() {
+    const { getUser } = await import('../util/firebase/auth');
+
+    const user = await getUser();
+    this.setState({
+      authStateKnown: true,
+      isSignedIn: !!user,
+    });
+
+    return user;
   }
 
   /**
@@ -187,6 +249,20 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
   }
 
   private onLogin = (ev: React.MouseEvent) => {
-    // TODO: Implement login logic
+    this.setState({
+      isLoginModalOpen: true,
+      loginModalTitle: "Log In",
+    });
+  }
+
+  private onLoginModalClose = () => {
+    this.setState({ isLoginModalOpen: false });
+  }
+
+  private onSignUp = (ev: React.MouseEvent) => {
+    this.setState({
+      isLoginModalOpen: true,
+      loginModalTitle: "Sign Up",
+    });
   }
 }

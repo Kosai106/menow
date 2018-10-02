@@ -1,0 +1,9 @@
+.modal .login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .btn-cancel {
+    margin: 1rem;
+  }
+}

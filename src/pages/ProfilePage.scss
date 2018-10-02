@@ -19,6 +19,23 @@
     background-color: #fafafa;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpolygon fill='white' points='0,100 1000,0 1000,100'/%3E%3C/svg%3E");
 
+    .buttons {
+      display: flex;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+
+      button {
+        font-family: 'Roboto Mono', monospace;
+        padding: 0.5rem 1rem;
+        background: none;
+        border: none;
+        text-decoration: underline;
+        text-transform: none;
+        color: #000;
+      }
+    }
+
     .bio {
       display: flex;
       align-items: center;
