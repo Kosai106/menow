@@ -80,7 +80,7 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
     user: defaultData.user,
   };
 
-  private unsubscribeFirestore: () => void;
+  private unsubscribeFirestore: (() => void)[] = [];
 
   constructor(props: ProfilePageProps) {
     super(props);
@@ -120,9 +120,9 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
   }
 
   private async invalidateFirestore() {
-    if (this.unsubscribeFirestore) {
-      this.unsubscribeFirestore();
-    }
+    this.unsubscribeFirestore.forEach(fn => fn());
+    this.unsubscribeFirestore = [];
+
     if (!this.props.match.params.username) {
       this.setState(ProfilePage.defaultState);
       return;
@@ -143,13 +143,19 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
 
     const userSnap = users.docs[0];
 
-    this.setState({ user: userSnap.data() as User });
-    this.unsubscribeFirestore = userSnap.ref
+    const unsubUser = userSnap.ref
+      .onSnapshot(snap => this.setState({
+        isLoading: false,
+        user: snap.data() as User,
+      }));
+    const unsubStatus = userSnap.ref
       .collection('current_status')
       .onSnapshot(statuses => this.setState({
         isLoading: false,
         statuses: statuses.docs.map(status => status.data() as Status)
       }));
+
+    this.unsubscribeFirestore.push(unsubUser, unsubStatus);
   }
 
   /**
