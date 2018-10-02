@@ -85,8 +85,6 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
   constructor(props: ProfilePageProps) {
     super(props);
 
-    this.onAddFriend = this.onAddFriend.bind(this);
-    this.onLogin = this.onLogin.bind(this);
     this.state = ProfilePage.defaultState;
   }
 
@@ -184,11 +182,11 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
     });
   }
 
-  private onAddFriend(ev: React.MouseEvent) {
+  private onAddFriend = (ev: React.MouseEvent) => {
     // TODO: Implement add friend logic
   }
 
-  private onLogin(ev: React.MouseEvent) {
+  private onLogin = (ev: React.MouseEvent) => {
     // TODO: Implement login logic
   }
 }
