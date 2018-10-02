@@ -119,6 +119,10 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
     );
   }
 
+  /**
+   * Attach firestore listeners to the user data and statuses and
+   * update the component state on changes.
+   */
   private async invalidateFirestore() {
     this.unsubscribeFirestore.forEach(fn => fn());
     this.unsubscribeFirestore = [];
